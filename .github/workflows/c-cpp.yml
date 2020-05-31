@@ -12,6 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v2
     - name: Set AppID
       run: set /p APP_ID=<app_id.txt
     - name: CMake Generate
