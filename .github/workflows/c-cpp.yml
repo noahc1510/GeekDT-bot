@@ -20,15 +20,15 @@ jobs:
     - name: CMake Generate
       run: cmake -B build -G "Visual Studio 16 2019" -A Win32
     - name: CMake Build
-      run: 
+      run: |
         cmake --build build --target app --config Debug --clean-first --verbose
         cmake --build build --target app --config Release --clean-first --verbose
     - name: Pack Debug Build
-      run: 
+      run: |
         copy build\Debug\app.dll app.dll
         7z a build\Debug\%APP_ID%.zip app.json app.dll
     - name: Pack Release Build
-      run: 
+      run: |
         copy build\Release\app.dll app.dll
         7z a build\Release\%APP_ID%.zip app.json app.dll
       
