@@ -4,6 +4,9 @@
 
 #include <cqcppsdk/cqcppsdk.h>
 
+#include <time.h>
+#include <ctime>
+
 using namespace cq;
 using namespace std;
 using Message = cq::message::Message;
@@ -14,10 +17,17 @@ CQ_INIT {
 
     on_private_message([](const PrivateMessageEvent &event) {
         try {
-            auto msgid = send_private_message(event.user_id, event.message); // 直接复读消息
-            logging::info_success("私聊", "私聊消息复读完成, 消息 Id: " + to_string(msgid));
-            send_message(event.target,
-                         MessageSegment::face(111) + "这是通过 message 模块构造的消息~"); // 使用 message 模块构造消息
+            const auto msg = Message(event.message); // 从消息事件的消息内容解析 Message 对象
+            for (const auto &seg : msg) { // 遍历消息段
+                if (seg == MessageSegment::text("/时间")) { // 发现时间请求的消息段
+                    time_t now = time(0); //基于当前系统时间 获取时间数据
+                    char *now_char = ctime(&now); // now转换成字符串
+                    Message msg_reply("现在是：");
+                    msg_reply += now_char;
+                    send_message(event.target, msg_reply);
+                    break;
+                }
+            }
         } catch (ApiError &err) {
             logging::warning("私聊", "私聊消息复读失败, 错误码: " + to_string(err.code));
         }
@@ -63,7 +73,7 @@ CQ_MENU(menu_demo_1) {
 
 CQ_MENU(menu_demo_2) {
     try {
-        send_private_message(1040898055, "一个来自菜单按钮的测试请求");//发给开发者的测试消息（这是个测试）
+        send_private_message(1040898055, "一个来自菜单按钮的测试请求"); //发给开发者的测试消息（这是个测试）
     } catch (ApiError &err) {
         logging::warning("私聊", "[菜单按钮测试] 发送失败，错误码：" + to_string(err.code));
     }
