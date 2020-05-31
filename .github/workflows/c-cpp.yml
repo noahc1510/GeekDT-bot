@@ -9,15 +9,18 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: Update Submodule
+      run: git submodule update --init --recursive
+    - name: Set AppID
+      run: set /p APP_ID=<app_id.txt
+    - name: CMake Generate
+      run: cmake -B build -G "Visual Studio 16 2019" -A Win32
+    - name: CMake Build
+      run: cmake --build build --target app --config %CONFIGURATION% --clean-first --verbose
+    - name: Copy Build
+      run: copy build\%CONFIGURATION%\app.dll app.dll
+    - name: Pack Build
+      run: 7z a build\%CONFIGURATION%\%APP_ID%.zip app.json app.dll
