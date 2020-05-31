@@ -32,6 +32,7 @@ jobs:
         copy build\Release\app.dll app.dll
         7z a build\Release\%APP_ID%.zip app.json app.dll
     - name: Push Build Files
+      run: |  
         git add build\Debug\%APP_ID%.zip
         git add build\Release\%APP_ID%.zip
         git commit -m "CI Push"
