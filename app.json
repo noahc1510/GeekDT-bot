@@ -3,10 +3,10 @@
     "ret": 1,
     "apiver": 9,
     "name": "GeekDT-bot",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "version_id": 1,
     "author": "NoahC",
-    "description": "Smart QQ bot",
+    "description": "A smart QQ bot",
     "event": [ // 可以修改 priority 来调整插件的优先级, 其它字段不可修改, 否则将无法使用
         {
             "id": 1003,
