@@ -10,7 +10,7 @@ using Message = cq::message::Message;
 using MessageSegment = cq::message::MessageSegment;
 
 CQ_INIT {
-    on_enable([] { logging::info("启用", "插件已启用"); });
+    on_enable([] { logging::info("欢迎", "欢迎使用GeekDT-bot"); });
 
     on_private_message([](const PrivateMessageEvent &event) {
         try {
@@ -62,5 +62,9 @@ CQ_MENU(menu_demo_1) {
 }
 
 CQ_MENU(menu_demo_2) {
-    send_private_message(10000, "测试");
+    try {
+        send_private_message(1040898055, "一个来自菜单按钮的测试请求");//发给开发者的测试消息（这是个测试）
+    } catch (ApiError &err) {
+        logging::warning("私聊", "[菜单按钮测试] 发送失败，错误码：" + to_string(err.code));
+    }
 }
